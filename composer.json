@@ -1,0 +1,9 @@
+{
+    "name": "meu/capesesp-php",
+    "description": "Um projeto básico em PHP",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}

@@ -64,3 +64,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php echo $formattedResponse; ?>
     </div>
 </section>
+
+<script>
+    // Carregar dados do Session Storage e preencher os campos do formulário
+    document.addEventListener('DOMContentLoaded', function () {
+        const demanda = sessionStorage.getItem('demanda');
+        if (demanda) {
+            const dados = JSON.parse(demanda);
+            document.getElementById('codigo').value = dados.codigo || '';
+        }
+    });
+</script>

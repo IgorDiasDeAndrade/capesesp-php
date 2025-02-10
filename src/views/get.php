@@ -1,4 +1,3 @@
-
 <?php
 $formattedResponse = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -39,6 +38,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $formattedResponse .= '<p style="margin: 0"><strong>Status:</strong> ' . htmlspecialchars($item['ativo']['descricao']) . '</p>';
                     $formattedResponse .= '<p style="margin: 0"><strong>Atendimento:</strong> ' . htmlspecialchars($item['atendimento']['descricao']) . '</p>';
                     $formattedResponse .= '<p style="margin: 0"><strong>Prazo:</strong> ' . htmlspecialchars($item['prazo']) . ' dias</p>';
+                    
+                    // Adiciona o botão "Editar"
+                    $formattedResponse .= '<button onclick="editarDemanda(
+                        \'' . htmlspecialchars($item['codigo']) . '\',
+                        \'' . htmlspecialchars($item['descricao']) . '\',
+                        \'' . htmlspecialchars($item['descricaoweb']) . '\',
+                        \'' . htmlspecialchars($item['tipo']['descricao']) . '\',
+                        \'' . htmlspecialchars($item['grupo']['descricao']) . '\',
+                        \'' . htmlspecialchars($item['area']['descricao']) . '\',
+                        \'' . htmlspecialchars($item['ativo']['descricao']) . '\',
+                        \'' . htmlspecialchars($item['atendimento']['descricao']) . '\',
+                        \'' . htmlspecialchars($item['prazo']) . '\'
+                    )" style="padding: 8px 12px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; margin: 10px;">
+                        Editar
+                    </button>';
+                    $formattedResponse .= '<button onclick="ExcluirDemanda(
+                        \'' . htmlspecialchars($item['codigo']) . '\',
+                    )" style="padding: 8px 12px; background-color: #333; color: white; border: none; border-radius: 4px; cursor: pointer; margin: 10px;">
+                        Excluir
+                    </button>';
                     $formattedResponse .= '</div>';
                 }
             } else {
@@ -54,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <section style="max-width: 500px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; background-color: #f9f9f9; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-    <h2 style="text-align: center;">Metodo GET</h2>
+    <h2 style="text-align: center;">Método GET</h2>
     <form method="POST" style="display: flex; flex-direction: column; gap: 10px;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
             <label for="tipo" style="width: 30%; font-size: 14px;">Tipo:</label>
@@ -71,3 +90,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php echo $formattedResponse; ?>
     </div>
 </section>
+
+<script>
+    function editarDemanda(codigo, descricao, descriweb, tipo, grupo, area, ativo, atendimento, prazo) {
+        const dados = {
+            codigo,
+            descricao,
+            descriweb,
+            tipo,
+            grupo,
+            area,
+            ativo,
+            atendimento,
+            prazo
+        };
+        // Salva os dados no Session Storage
+        sessionStorage.setItem('demanda', JSON.stringify(dados));
+
+        // Redireciona para a página desejada
+        window.location.href = 'http://localhost:8080/capesesp-php/public/?page=PUT';
+    }
+    function ExcluirDemanda(codigo){
+        const dados = {
+            codigo
+        }
+        sessionStorage.setItem('demanda', JSON.stringify(dados))
+        window.location.href = 'http://localhost:8080/capesesp-php/public/?page=DELETE';
+    }
+</script>
